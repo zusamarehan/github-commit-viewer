@@ -1,11 +1,9 @@
-import requests
-import csv
-from pandas.io.json import json_normalize
-import pandas as pd
 import json
+
+from Utilities import getCommitBasedAuthor, getAllCollaborators
 import flask
 from flask_cors import CORS
-from flask import request
+from flask import request, Response
 
 app = flask.Flask(__name__)
 CORS(app)
@@ -33,8 +31,15 @@ def get_commits():
 	from_date = request.args.get('from-date')
 	to_date = request.args.get('to-date')
 	api = request.args.get("api-key")
+	authorNames = getAllCollaborators(owner_name, repo_name, api)
+	data, names, status = getCommitBasedAuthor(authorNames, [from_date, to_date], api,
+											   owner_name, repo_name)
 
-	pass
+	if status:
+		return Response(response=json.dumps(data))
+	else:
+		return Response(status=401)
+
 
 
 if __name__=='__main__':

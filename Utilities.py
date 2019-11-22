@@ -17,17 +17,18 @@ def check_daterange(date):
 
 
 # get all the commits of the users for that branch
-def getCommitBasedAuthor(x, dateRange):
+def getCommitBasedAuthor(authors, dateRange, api, owner, repo):
     checker = check_daterange(dateRange)
     #     print(dateRange)
     if checker[0]:
-        url = "https://api.github.com/repos/dckapinc/qatouch/commits"
-        collaborators = x
+        url = "https://api.github.com/repos/" + owner + "/" + repo + "/commits"
+
+        collaborators = authors
         newCollab = []
         collab_data = []
         df = pd.DataFrame()
         headers = {
-            'Authorization': "Bearer f8230cbe4660bdfda554620c9ef0c4da7a3b1838",
+            'Authorization': "Bearer " + api,
             'User-Agent': "PostmanRuntime/7.15.0",
             'Accept': "*/*",
             'Cache-Control': "no-cache",
@@ -62,14 +63,14 @@ def getCommitBasedAuthor(x, dateRange):
 
 
 # function to get all the author for the repo and branch
-def getAllCollaborators(owner, repo):
+def getAllCollaborators(owner, repo, api):
     auths = []
-    url = "https://api.github.com/repos/dckapinc/qatouch/collaborators"
+    url = "https://api.github.com/repos/"+ owner + "/" + repo +"/collaborators"
 
     querystring = {"owner": owner, "repo": repo}
 
     headers = {
-        'Authorization': "Bearer f8230cbe4660bdfda554620c9ef0c4da7a3b1838",
+        'Authorization': "Bearer " + api ,
         'User-Agent': "PostmanRuntime/7.15.0",
         'Accept': "*/*",
         'Cache-Control': "no-cache",
